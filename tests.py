@@ -1,6 +1,4 @@
 import sqlite3
+from B_crud import *
 
-from crud import *
-
-for i in range(1,11):
-    supprimer_objet(i)
+supprimer_objets()
