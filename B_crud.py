@@ -6,15 +6,16 @@ import sqlite3
 ########################################### CREATE #####################################################
 ########################################################################################################
 
-def creer_gare(gare:str) -> None:
+def creer_gare(gare:str, lat:float, lon: float) -> None:
     connexion = sqlite3.connect('bdd.db')
     curseur = connexion.cursor()
     curseur.execute("""
                  INSERT INTO gare 
-                 VALUES (NULL, ?)
-                 """, (gare))
+                 VALUES (?, ?, ?, NULL, NULL, NULL, NULL)
+                 """, (gare, lat, lon))
     connexion.commit()
     connexion.close()
+    
 
 
 # def creer_objet( type:str, nature:str, date:str, gare:str) -> None:
@@ -35,17 +36,6 @@ def creer_gare(gare:str) -> None:
 ########################################################################################################
 ########################################### UPDATE #####################################################
 ########################################################################################################
-
-def update_geo_gare(gare:str, lat:float, lon: float) -> None:
-    connexion = sqlite3.connect('bdd.db')
-    curseur = connexion.cursor()
-    curseur.execute("""
-                    UPDATE gare
-                        SET lat = ?, lon = ?
-                        WHERE gare = ?
-                    """, (lat, lon, gare))  
-    connexion.commit()
-    connexion.close()
     
 def update_frequentation_gare(gare:str, freq2019:int, freq2020:int, freq2021:int, freq2022: int):
     connexion = sqlite3.connect('bdd.db')
@@ -58,6 +48,17 @@ def update_frequentation_gare(gare:str, freq2019:int, freq2020:int, freq2021:int
     connexion.commit()
     connexion.close()
 
+def update_gare(ancien_nom_gare: str, nouveau_nom_gare:str):
+    connexion = sqlite3.connect('bdd.db')
+    curseur = connexion.cursor()
+    curseur.execute("""
+                    UPDATE gare
+                        SET gare = ?
+                        WHERE gare = ?
+                    """, (nouveau_nom_gare, ancien_nom_gare))  
+    connexion.commit()
+    connexion.close()
+
 ########################################################################################################
 ########################################### DELETE #####################################################
 ########################################################################################################
@@ -67,6 +68,15 @@ def supprimer_objets():
     curseur = connexion.cursor()
     curseur.execute("""
                     DELETE FROM objet
+                    """)
+    connexion.commit()
+    connexion.close()
+
+def supprimer_gares():
+    connexion = sqlite3.connect('bdd.db')
+    curseur = connexion.cursor()
+    curseur.execute("""
+                    DELETE FROM gare
                     """)
     connexion.commit()
     connexion.close()
