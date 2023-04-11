@@ -3,6 +3,7 @@ import numpy as np
 import plotly.express as px
 import streamlit as st
 import sqlite3
+import folium
 
 ####################
 #################### HISTOGRAMME
@@ -56,8 +57,8 @@ annees = ['2019', '2020', '2021', '2022']
 types = df_objet['type'].unique().tolist()
 
 # Sélection de l'année et du type d'objet avec des widgets Streamlit
-annee_selectionnee = st.selectbox("Sélectionnez l'année :", annees)
-types_selectionnes = st.multiselect("Sélectionnez le type d'objet :", types, default=types[:])
+annee_selectionnee = st.selectbox("Sélectionnez l'année :", annees, key=1)
+types_selectionnes = st.multiselect("Sélectionnez le type d'objet :", types, default=types[:], key=3)
 
 # Filtrage des données en fonction de la sélection de l'utilisateur
 df_objet_filtre = df_objet[(df_objet['type'].isin(types_selectionnes)) & (df_objet['date'].str[-4:] == annee_selectionnee)]
@@ -71,8 +72,8 @@ df_grouped = df.groupby(['gare', 'lat', 'lon', 'frequentation_' + annee_selectio
 
 # Affichage de la carte avec Plotly Express
 #scatter_mapbox
-fig = px.scatter_mapbox(df_grouped, lat="lat", lon="lon", hover_name="gare", size="nombre_objets",
-                        color="frequentation_" + annee_selectionnee, color_continuous_scale=px.colors.cyclical.IceFire,
-                        size_max=15, zoom=10, mapbox_style="carto-positron")
+fig = px.scatter_mapbox(df_grouped, lat="lat", lon="lon", hover_name="gare", color="nombre_objets",
+                        size="frequentation_" + annee_selectionnee, color_continuous_scale=px.colors.cyclical.IceFire,
+                        size_max=30, zoom=11, mapbox_style="carto-positron")
 fig.update_layout(title="Répartition des objets trouvés par gare et fréquentation en " + annee_selectionnee)
 st.plotly_chart(fig)
