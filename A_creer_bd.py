@@ -5,7 +5,7 @@ curseur = connexion.cursor()
 
 curseur.execute("""
                 CREATE TABLE IF NOT EXISTS gare (
-                    gare TEXT NOT NULL,
+                    gare TEXT NOT NULL PRIMARY KEY,
                     lat FLOAT,
                     lon FLOAT,
                     frequentation_2019 INT,
@@ -17,9 +17,8 @@ curseur.execute("""
 
 curseur.execute("""
                 CREATE TABLE IF NOT EXISTS temperature (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
                     temperature FLOAT NOT NULL,
-                    date TEXT NOT NULL
+                    date TEXT NOT NULL PRIMARY KEY
                 )
                 """)
 
