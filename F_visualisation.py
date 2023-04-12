@@ -71,7 +71,6 @@ df = pd.merge(df_objet_filtre, df_gare_filtre, on='gare')
 df_grouped = df.groupby(['gare', 'lat', 'lon', 'frequentation_' + annee_selectionnee]).size().reset_index(name='nombre_objets')
 
 # Affichage de la carte avec Plotly Express
-#scatter_mapbox
 fig = px.scatter_mapbox(df_grouped, lat="lat", lon="lon", hover_name="gare", color="nombre_objets",
                         size="frequentation_" + annee_selectionnee, color_continuous_scale=px.colors.cyclical.IceFire,
                         size_max=30, zoom=11, mapbox_style="carto-positron")
