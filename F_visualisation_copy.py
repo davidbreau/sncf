@@ -44,7 +44,8 @@ st.write('Carte de Paris avec les barres représentant le ratio fréquentation /
 view_state = pdk.ViewState(
     longitude=df_gare['lon'].mean(),
     latitude=df_gare['lat'].mean(),
-    zoom=10
+    zoom=12,
+    pitch=45
 )
 layer = pdk.Layer(
     'ColumnLayer',
@@ -52,11 +53,11 @@ layer = pdk.Layer(
     get_position='[lon, lat]',
     get_elevation='ratio_freq_objets/100',
     elevation_scale=1,
-    get_fill_color='[255 * ratio_freq_objets, 255 * (1 - ratio_freq_objets), 0]',
+    get_fill_color='[255 * (1 - ratio_freq_objets), 0, 255 * ratio_freq_objets]',
     pickable=True,
     auto_highlight=True,
     extruded=True,
-    coverage=1
+    coverage=0.2
 )
 tooltip = {
     "html": "<b>Gare :</b> {gare}<br/><b>Ratio fréquentation / objets trouvés :</b> {ratio_freq_objets:.2f}",
