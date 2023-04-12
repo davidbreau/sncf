@@ -37,7 +37,8 @@ df_nb_objets_par_gare = df_objet_filtre.groupby('gare')['id'].count().reset_inde
 # df = df_objet_filtre.merge(df_nb_objets_par_gare, df_gare_filtre, on='gare')
 
 # Calcul du ratio fréquentation / nombre d'objets trouvés
-df_gare['ratio_freq_objets'] = df_gare['frequentation_' + annee_selectionnee] / df_nb_objets_par_gare.nb_objets
+df_gare['ratio_freq_objets'] = round((df_nb_objets_par_gare.nb_objets * 1_000_000 / df_gare['frequentation_' + annee_selectionnee]))
+
 
 # Création de la carte de Paris avec les barres représentant le ratio
 st.write('Carte de Paris avec les barres représentant le ratio fréquentation / nombre d\'objets trouvés :')
@@ -51,16 +52,17 @@ layer = pdk.Layer(
     'ColumnLayer',
     data=df_gare,
     get_position='[lon, lat]',
-    get_elevation='ratio_freq_objets/100',
-    elevation_scale=1,
-    get_fill_color='[255 * (1 - ratio_freq_objets), 0, 255 * ratio_freq_objets]',
+    get_elevation='ratio_freq_objets',
+    elevation_scale=10,
+    # get_fill_color='[255 * (1 - ratio_freq_objets), 0, 255 * ratio_freq_objets]',
+    get_fill_color='[255, ratio_freq_objets, ratio_freq_objets, 175]',
     pickable=True,
     auto_highlight=True,
     extruded=True,
     coverage=0.2
 )
 tooltip = {
-    "html": "<b>Gare :</b> {gare}<br/><b>Ratio fréquentation / objets trouvés :</b> {ratio_freq_objets:.2f}",
+    "html": "<b>Gare :</b> {gare}<br/><b>Nombre d'objets trouvés sur 1 million de voyageurs :</b> {ratio_freq_objets} objets",
     "style": {"backgroundColor": "white", "color": "black"}
 }
 r = pdk.Deck(layers=[layer], initial_view_state=view_state, tooltip=tooltip)
