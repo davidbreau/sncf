@@ -35,4 +35,5 @@ st.write("Est-ce que le nombre d'objets perdus est corrélé à la température 
 
 #################################################################
 
-
+st.text('Quelle est la médiane du nombre d’objets trouvés en fonction de la saison? Il y a t il une correlation entre ces deux variables d\'après le graphique?')
+df

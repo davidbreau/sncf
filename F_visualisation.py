@@ -65,12 +65,12 @@ types_selectionnes = st.multiselect("Sélectionnez les types d'objets :", types,
 # Filtrage des données en fonction de la sélection de l'utilisateur
 df_objet_filtre = df_objet[(df_objet['type'].isin(types_selectionnes)) & (df_objet['date'].str[-4:] == annee_selectionnee)]
 df_gare_filtre = df_gare[['gare', 'lat', 'lon', 'frequentation_' + annee_selectionnee]]
-
+df_gare = df_gare.sort_values('gare').reset_index().drop(columns='index')
 # Calcul du nombre d'objets trouvés des types sélectionnés pour chaque gare
 df_nb_objets_par_gare = df_objet_filtre.groupby('gare')['id'].count().reset_index().rename(columns={'id': 'nb_objets'})
 
 # Calcul du ratio fréquentation / nombre d'objets trouvés
-df_gare['ratio_freq_objets'] = round((df_nb_objets_par_gare.nb_objets * 1_000_000 / df_gare['frequentation_' + annee_selectionnee]))
+df_gare['ratio_freq_objets'] = round((df_nb_objets_par_gare.nb_objets * 1_000_000) / df_gare['frequentation_' + annee_selectionnee])
 
 import colorcet as cc
 
@@ -102,7 +102,7 @@ layer = pdk.Layer(
     data=df_gare,
     get_position='[lon, lat]',
     get_elevation='ratio_freq_objets',
-    elevation_scale=10,
+    elevation_scale=25,
     get_fill_color='rgb_color',
     pickable=True,
     auto_highlight=True,

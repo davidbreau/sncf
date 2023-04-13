@@ -26,3 +26,4 @@ ax.set_ylabel('Nombre d\'objets trouvés')
 
 # Afficher le scatterplot dans Streamlit
 st.pyplot(fig)
+
