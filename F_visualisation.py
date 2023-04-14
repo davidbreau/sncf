@@ -77,7 +77,7 @@ import colorcet as cc
 def plasma_color(value, min_value, max_value):
     value_normalized = (value - min_value) / (max_value - min_value)
     color_index = int(value_normalized * 255)
-    hex_color = cc.palette["CET_CBD2"][color_index]
+    hex_color = cc.palette["CET_C1"][color_index]
     rgb_color = tuple(int(hex_color[i:i+2], 16) for i in (1, 3, 5))
     return list(rgb_color)
 
@@ -92,6 +92,7 @@ df_gare['rgb_color'] = df_gare['plasma_color'].apply(lambda x: tuple(x))
 
 # Création de la carte de Paris avec les barres représentant le ratio
 view_state = pdk.ViewState(
+    # map_style=None,
     longitude=df_gare['lon'].mean(),
     latitude=df_gare['lat'].mean(),
     zoom=12,
@@ -107,7 +108,9 @@ layer = pdk.Layer(
     pickable=True,
     auto_highlight=True,
     extruded=True,
-    coverage=0.2
+    coverage=0.3,
+    disk_resolution=50,
+    opacity=0.8,
 )
 tooltip = {
     "html": "<b>Gare :</b> {gare}<br/><b>Nombre d'objets trouvés sur 1 million de voyageurs :</b> {ratio_freq_objets} objets",
