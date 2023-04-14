@@ -26,11 +26,11 @@ st.title("Analyse des objets trouvés en fonction de la température")
 
 df = load_data()
 df_filtre = prepare_data(df)
-
+df_filtre
 fig = px.scatter(df_filtre, x='temperature', y='nombre_objets', color='temperature', color_continuous_scale='Plasma')
 st.write(fig)
 
-st.write("Est-ce que le nombre d'objets perdus est corrélé à la température d'après ce graphique?")
+st.write("Il n'y a pas plus d'objet perdus lors des température froide")
 
 
 
@@ -55,3 +55,11 @@ counts = df_filtre.groupby(['saison', 'type']).size().reset_index(name='count')
 # Création du boxplot avec Plotly Express
 box = px.box(counts, x='saison', y='count', color='saison', color_discrete_sequence=px.colors.sequential.Plasma)
 st.plotly_chart(box)
+
+st.write(f"Le nombre d'objets trouvés pour chaque saison en {annee} est : ")
+for saison in df['saison'].dropna().unique():
+    nb_objets = df_filtre[df_filtre['saison'] == saison]['type'].count()
+    mediane = counts[counts['saison'] == saison]['count'].median() # calcul de la médiane
+    st.write(f"{saison} : {nb_objets} objets trouvés, médiane : {mediane}") # affichage de la médiane
+
+st.write("Pas de corrélation évidente entre la saison et le nombre d'objets perdus")
